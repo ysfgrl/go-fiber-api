@@ -1,0 +1,67 @@
+
+###
+# sing up
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "userName": "ysfgrl",
+  "email": "ysfgrl@test.com",
+  "firstName": "yusuf",
+  "lastName": "Uğurlu",
+  "password": "123456",
+  "role": "admin",
+  "profile": "minio://default"
+}
+
+###
+# get token
+
+GET http://localhost:8080/auth/signin?password=testd&username=ysfgrl
+
+> {% client.global.set("auth_token", response.body.json.token); %}
+
+###
+# get token
+
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "username": "ysfgrl",
+  "password": "123456"
+}
+> {% client.global.set("token", response.body.content.token); %}
+
+###
+
+
+
+###
+
+GET http://localhost:8080/user/list ?page=1&gte=2006-01-02T15:04:05Z
+Authorization: {{token}}
+
+###
+
+GET http://localhost:8080/user/get/6483ac5209b0e9eefce0e35d
+
+
+###
+
+DELETE http://localhost:8080/user/delete/6483ac5209b0e9eefce0e35d
+
+
+###
+
+POST http://localhost:8080/upload/userProfile
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+
+--WebAppBoundary
+Content-Disposition: form-data; name="profile"; filename="IMG_0006.png"
+Content-Type: image/png
+
+< ./IMG_0001.PNG
+--WebAppBoundary--
