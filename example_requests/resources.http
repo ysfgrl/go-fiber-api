@@ -40,28 +40,28 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/user/list ?page=1&gte=2006-01-02T15:04:05Z
+GET http://localhost:8080/resources/list
 Authorization: {{token}}
 
 ###
 
-GET http://localhost:8080/user/get/6486d3e6a7968fc6762677d3
+GET http://localhost:8080/resources/get/64dd7a3831779826103cb3ac
 
 
 ###
 
-DELETE http://localhost:8080/user/delete/6483ac5209b0e9eefce0e35d
+POST http://localhost:8080/resources/add
+Content-Type: application/json
 
-
-###
-
-POST http://localhost:8080/upload/userProfile
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
-
---WebAppBoundary
-Content-Disposition: form-data; name="profile"; filename="IMG_0006.png"
-Content-Type: image/png
-
-< ./IMG_0001.PNG
---WebAppBoundary--
+{
+  "url": "http://testurl",
+  "title": "test",
+  "type": "image",
+  "group": "Undefined",
+  "task": "FaceDetect",
+  "status": "created",
+  "params": {
+    "par": 1,
+    "par2": ["tes", "ttt"]
+  }
+}

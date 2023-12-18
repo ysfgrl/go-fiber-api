@@ -1,0 +1,35 @@
+package services
+
+import (
+	"context"
+	"github.com/ysfgrl/fibersocket"
+	"go-fiber-api/src/helpers"
+	"go-fiber-api/src/models"
+	"go-fiber-api/src/models/elastic_collections"
+	"go-fiber-api/src/repository"
+	"go-fiber-api/src/repository/elastic_repository"
+)
+
+type TaskService struct {
+	repo repository.Repository[elastic_collections.TaskState]
+	ctx  context.Context
+}
+
+func NewTaskService() TaskService {
+	return TaskService{
+		elastic_repository.NewTaskStateRepo("task_state", helpers.Elastic.GetClient()),
+		context.TODO(),
+	}
+}
+
+func (service *TaskService) Add(schema elastic_collections.TaskState) (*elastic_collections.TaskState, *models.MyError) {
+	socketServer := fibersocket.GetServerByName("task_server")
+	if socketServer != nil {
+		//socketServer.Emit(shcema)
+	}
+	return service.repo.Add(schema)
+}
+
+func (service *TaskService) GetList(schema models.ListRequest) (*models.ListResponse[elastic_collections.TaskState], *models.MyError) {
+	return service.repo.List(schema)
+}

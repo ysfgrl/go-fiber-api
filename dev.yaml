@@ -1,0 +1,33 @@
+
+app:
+  port: 8080
+  host: 0.0.0.0
+
+token:
+  secret: fsdfgdfdg
+  expire: 15m
+
+mongo:
+  url: mongodb://admin:admin@localhost:27017/admin
+  db: admin
+
+redis:
+  url: redis://redis:6379/0
+  db: 0
+minio:
+  url: localhost:9000
+  port: 9000
+  accessKey: admin
+  secretKey: Admin123?
+elastic:
+  url: http://localhost:9200
+
+rabbit:
+  url: amqp://guest:guest@localhost:5672/
+  que: machinery_tasks
+  expire: 3600
+  exchange: machinery_exchange
+  exchangeType: direct
+  biddingKey: machinery_task
+  preFetchCount: 3
+  consumerTag: machinery_worker

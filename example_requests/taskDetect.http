@@ -1,0 +1,102 @@
+
+###
+# sing up
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "userName": "ysfgrl",
+  "email": "ysfgrl@test.com",
+  "firstName": "yusuf",
+  "lastName": "Uğurlu",
+  "password": "123456",
+  "role": "admin",
+  "profile": "minio://default"
+}
+
+###
+# get token
+
+GET http://localhost:8080/auth/signin?password=testd&username=ysfgrl
+
+> {% client.global.set("auth_token", response.body.json.token); %}
+
+###
+# get token
+
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "username": "ysfgrl",
+  "password": "123456"
+}
+> {% client.global.set("token", response.body.content.token); %}
+
+###
+
+
+
+###
+
+GET http://localhost:8080/process/list
+Authorization: {{token}}
+
+###
+
+POST http://localhost:8080/task/add
+Content-Type: application/json
+
+{
+  "resourceId": "FFFFFFFFFFFF",
+  "taskId": "64c47cab2df80f40e601a3e5",
+  "status": "inQue"
+}
+
+###
+
+POST http://localhost:8080/process/detect
+Content-Type: application/json
+
+{
+  "resourceId": "FFFFFFFFFFFF",
+  "name": "Caffe1",
+  "result": [
+    {
+      "top": 1,
+      "left": 2,
+      "right": 3,
+      "bottom": 4,
+      "width": 5,
+      "height": 6,
+      "confidence": 0.9,
+      "index": 0
+    },
+    {
+      "top": 1,
+      "left": 2,
+      "right": 3,
+      "bottom": 4,
+      "width": 5,
+      "height": 6,
+      "confidence": 0.9,
+      "index": 1
+    }
+  ]
+}
+
+
+
+###
+POST http://localhost:8080/resource/task/add
+Content-Type: application/json
+
+{
+  "resourceId": "64c47cab2df80f40e601a3e5",
+  "taskId": "64c47cab2df80f40e601a3e5",
+  "status": 1
+}
+
+
+###
