@@ -1,4 +1,4 @@
-module go-fiber-api
+module github.com/ysfgrl/go-fiber-api
 
 go 1.20
 
@@ -17,6 +17,7 @@ require (
 	github.com/ysfgrl/fibersocket v0.0.3
 	go.mongodb.org/mongo-driver v1.11.6
 	golang.org/x/crypto v0.9.0
+	github.com/o1egl/paseto v1.0.0
 )
 
 require (

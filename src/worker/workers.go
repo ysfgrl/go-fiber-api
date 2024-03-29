@@ -9,10 +9,10 @@ import (
 	eagerlock "github.com/RichardKnop/machinery/v2/locks/eager"
 	"github.com/RichardKnop/machinery/v2/log"
 	"github.com/RichardKnop/machinery/v2/tasks"
-	appconfig "go-fiber-api/src/config"
-	"go-fiber-api/src/helpers"
-	"go-fiber-api/src/models/elastic_collections"
-	apptask "go-fiber-api/src/worker/tasks"
+	"github.com/ysfgrl/go-fiber-api/src/clients"
+	appconfig "github.com/ysfgrl/go-fiber-api/src/config"
+	"github.com/ysfgrl/go-fiber-api/src/models/elastic_collections"
+	apptask "github.com/ysfgrl/go-fiber-api/src/worker/tasks"
 )
 
 var myWorker *worker = nil
@@ -65,12 +65,12 @@ func (w *worker) preTaskHandler(signature *tasks.Signature) {
 		CreatedAt:  *signature.ETA,
 		Error:      "",
 	}
-	helpers.AppRequest.Post("tasks/add", nil, taskState)
+	clients.AppRequest.Post("tasks/add", nil, taskState)
 	log.INFO.Println("I am a start of task handler for:", signature.UUID)
 }
 
 func (w *worker) postTaskHandler(signature *tasks.Signature) {
-	helpers.AppRequest.Put("tasks/status/"+signature.UUID, nil, nil)
+	clients.AppRequest.Put("tasks/status/"+signature.UUID, nil, nil)
 	log.INFO.Println("I am an end of task handler for:", signature.UUID)
 }
 

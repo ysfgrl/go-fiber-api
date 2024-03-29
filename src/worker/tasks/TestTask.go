@@ -7,8 +7,8 @@ import (
 	"github.com/RichardKnop/machinery/v2/log"
 	"github.com/RichardKnop/machinery/v2/tasks"
 	"github.com/opentracing/opentracing-go"
-	response2 "go-fiber-api/src/models"
-	"go-fiber-api/src/utils/response"
+	response2 "github.com/ysfgrl/go-fiber-api/src/models"
+	"github.com/ysfgrl/go-fiber-api/src/pkg/response"
 	"reflect"
 	"time"
 )
@@ -37,7 +37,7 @@ func (d *testTask) run(id string) error {
 	return nil
 }
 
-func (d *testTask) Register() *response2.MyError {
+func (d *testTask) Register() *response2.Error {
 	err := d.server.RegisterTask(d.BaseTask.Name, d.run)
 	if err != nil {
 		return response.GetError(err)
@@ -58,7 +58,7 @@ func (d *testTask) SetServer(server *machinery.Server) {
 	d.server = server
 }
 
-func (d *testTask) SendSync(args []tasks.Arg) ([]reflect.Value, *response2.MyError) {
+func (d *testTask) SendSync(args []tasks.Arg) ([]reflect.Value, *response2.Error) {
 	asyncResult, err := d.SendAsync(args)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (d *testTask) SendSync(args []tasks.Arg) ([]reflect.Value, *response2.MyErr
 	return results, nil
 }
 
-func (d *testTask) SendAsync(args []tasks.Arg) (*result.AsyncResult, *response2.MyError) {
+func (d *testTask) SendAsync(args []tasks.Arg) (*result.AsyncResult, *response2.Error) {
 
 	span, ctx := opentracing.StartSpanFromContext(context.Background(), "send")
 	defer span.Finish()

@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"go-fiber-api/src/models"
-	"go-fiber-api/src/utils/response"
+	"github.com/ysfgrl/go-fiber-api/src/models"
+	"github.com/ysfgrl/go-fiber-api/src/pkg/response"
 	"io/ioutil"
 	"net/http"
 )
@@ -15,7 +15,7 @@ type httpRequestHelper struct {
 	url    string
 }
 
-func NewHttpRequestHelper(ctx context.Context, url string) (*httpRequestHelper, *models.MyError) {
+func NewHttpRequestHelper(ctx context.Context, url string) (*httpRequestHelper, *models.Error) {
 	return &httpRequestHelper{
 		url:    url,
 		client: &http.Client{},
@@ -40,7 +40,7 @@ func (rh *httpRequestHelper) send(method string, endpoint string, params map[str
 		return &models.Response{
 			Code:    0,
 			Content: nil,
-			Error:   []*models.MyError{response.GetError(err)},
+			Error:   []*models.Error{response.GetError(err)},
 		}
 	}
 	q := req.URL.Query()
@@ -54,7 +54,7 @@ func (rh *httpRequestHelper) send(method string, endpoint string, params map[str
 		return &models.Response{
 			Code:    0,
 			Content: nil,
-			Error:   []*models.MyError{response.GetError(err)},
+			Error:   []*models.Error{response.GetError(err)},
 		}
 	}
 	defer res.Body.Close()
@@ -62,7 +62,7 @@ func (rh *httpRequestHelper) send(method string, endpoint string, params map[str
 	return &models.Response{
 		Code:    res.StatusCode,
 		Content: string(by),
-		Error:   []*models.MyError{},
+		Error:   []*models.Error{},
 	}
 }
 

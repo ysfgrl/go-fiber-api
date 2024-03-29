@@ -2,91 +2,66 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"go-fiber-api/src/models"
-	"go-fiber-api/src/utils/response"
+	"os"
 	"time"
 )
 
-var appConf *config = nil
-var App *app = nil
-var Token *token = nil
-var Mongo *mongo = nil
-var Redis *redis = nil
-var Minio *minio = nil
-var Elastic *elastic = nil
-var Rabbit *rabbit = nil
+var AppConf *config = nil
 
-type app struct {
-	Port string `mapstructure:"port"`
-	Host string `mapstructure:"host"`
-}
-
-type token struct {
-	Secret string        `mapstructure:"secret"`
-	Expire time.Duration `mapstructure:"expire"`
-}
-
-type mongo struct {
-	Url string `mapstructure:"url"`
-	Db  string `mapstructure:"db"`
-}
-
-type redis struct {
-	Url string `mapstructure:"url"`
-	Db  string `mapstructure:"db"`
-}
-
-type minio struct {
-	Url       string `mapstructure:"url"`
-	Port      int    `mapstructure:"port"`
-	AccessKey string `mapstructure:"accessKey"`
-	SecretKey string `mapstructure:"secretKey"`
-}
-
-type elastic struct {
-	Url string `mapstructure:"url"`
-}
-
-type rabbit struct {
-	Url           string `mapstructure:"url"`
-	Que           string `mapstructure:"que"`
-	Expire        int    `mapstructure:"expire"`
-	Exchange      string `mapstructure:"exchange"`
-	ExchangeType  string `mapstructure:"exchangeType"`
-	BiddingKey    string `mapstructure:"biddingKey"`
-	PreFetchCount int    `mapstructure:"preFetchCount"`
-	ConsumerTag   string `mapstructure:"consumerTag"`
-}
-type config struct {
-	App     app     `mapstructure:"app"`
-	Token   token   `mapstructure:"token"`
-	Mongo   mongo   `mapstructure:"mongo"`
-	Redis   redis   `mapstructure:"redis"`
-	Minio   minio   `mapstructure:"minio"`
-	Elastic elastic `mapstructure:"elastic"`
-	Rabbit  rabbit  `mapstructure:"rabbit"`
-}
-
-func InitConf(name string) *models.MyError {
-	appConf = &config{}
-	viper.AddConfigPath(".")
-	viper.SetConfigType("yaml")
-	viper.SetConfigName(name)
+func init() {
+	env := os.Getenv("ENV")
+	AppConf = &config{}
+	viper.SetConfigFile(env)
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
 	if err != nil {
-		return response.GetError(err)
+		panic(err)
 	}
-	err = viper.Unmarshal(appConf)
+	err = viper.Unmarshal(&AppConf.App)
+	err = viper.Unmarshal(&AppConf.Token)
+	err = viper.Unmarshal(&AppConf.Mongo)
+	err = viper.Unmarshal(&AppConf.Redis)
+	err = viper.Unmarshal(&AppConf.Minio)
+	err = viper.Unmarshal(&AppConf.Elastic)
 	if err != nil {
-		return response.GetError(err)
+		panic(err)
+		os.Exit(1)
 	}
-	App = &appConf.App
-	Token = &appConf.Token
-	Mongo = &appConf.Mongo
-	Redis = &appConf.Redis
-	Minio = &appConf.Minio
-	Elastic = &appConf.Elastic
-	Rabbit = &appConf.Rabbit
-	return nil
+}
+
+type config struct {
+	App struct {
+		Port  int    `mapstructure:"APP_PORT"`
+		Host  string `mapstructure:"APP_HOST"`
+		Debug bool   `mapstructure:"APP_DEBUG"`
+	}
+	Token struct {
+		PublicKey  string        `mapstructure:"TOKEN_PUBLIC_KEY"`
+		PrivateKey string        `mapstructure:"TOKEN_PRIVATE_KEY"`
+		Method     string        `mapstructure:"TOKEN_METHOD"`
+		Type       string        `mapstructure:"TOKEN_TYPE"`
+		Expire     time.Duration `mapstructure:"TOKEN_EXPIRE"`
+	}
+	Mongo struct {
+		Url      string `mapstructure:"MONGO_URL"`
+		Port     int    `mapstructure:"MONGO_PORT"`
+		Db       string `mapstructure:"MONGO_DB"`
+		UserName string `mapstructure:"MONGO_USERNAME"`
+		Password string `mapstructure:"MONGO_PASSWORD"`
+	}
+	Redis struct {
+		Url  string `mapstructure:"REDIS_URL"`
+		Port int    `mapstructure:"REDIS_PORT"`
+		Db   string `mapstructure:"REDIS_DB"`
+	}
+	Minio struct {
+		Url       string `mapstructure:"MINIO_URL"`
+		Port      int    `mapstructure:"MONIO_PORT"`
+		AccessKey string `mapstructure:"MINIO_ACCESS_KEY"`
+		SecretKey string `mapstructure:"MINIO_SECRET_KEY"`
+	}
+	Elastic struct {
+		Url  string `mapstructure:"ELASTIC_URL"`
+		Port int    `mapstructure:"ELASTIC_PORT"`
+	}
 }

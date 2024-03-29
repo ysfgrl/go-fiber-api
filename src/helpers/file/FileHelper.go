@@ -2,8 +2,8 @@ package file
 
 import (
 	"github.com/gofiber/fiber/v2"
-	response2 "go-fiber-api/src/models"
-	"go-fiber-api/src/utils/response"
+	response2 "github.com/ysfgrl/go-fiber-api/src/models"
+	"github.com/ysfgrl/go-fiber-api/src/pkg/response"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 	TempUploadBucket = "./TEMP/"
 )
 
-func UploadTmpFile(c *fiber.Ctx, key string) (*response2.UploadedFile, *response2.MyError) {
+func UploadTmpFile(c *fiber.Ctx, key string) (*response2.UploadedFile, *response2.Error) {
 
 	file, err := c.FormFile(key)
 	if err != nil {

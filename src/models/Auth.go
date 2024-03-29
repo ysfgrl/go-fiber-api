@@ -8,9 +8,3 @@ type SignIn struct {
 type TokenModel struct {
 	Token string `json:"token"`
 }
-
-type SignedUser struct {
-	Id       string
-	UserName string
-	Role     string
-}

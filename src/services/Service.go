@@ -2,11 +2,12 @@ package services
 
 import (
 	"context"
-	"go-fiber-api/src/models"
+	"github.com/ysfgrl/go-fiber-api/src/models"
+	"github.com/ysfgrl/go-fiber-api/src/repository"
 )
 
-type Service[CType models.MongoCollections] interface {
-	Add(id string) (*CType, *models.MyError)
+type Service[CType repository.MongoCollections] interface {
+	Add(id string) (*CType, *models.Error)
 }
 
 type BaseService struct {

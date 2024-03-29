@@ -2,10 +2,10 @@ package services
 
 import (
 	"context"
-	"go-fiber-api/src/helpers"
-	"go-fiber-api/src/models"
-	"go-fiber-api/src/models/mongo_collections"
-	"go-fiber-api/src/repository"
+	"github.com/ysfgrl/go-fiber-api/src/clients"
+	"github.com/ysfgrl/go-fiber-api/src/models"
+	"github.com/ysfgrl/go-fiber-api/src/models/mongo_collections"
+	"github.com/ysfgrl/go-fiber-api/src/repository"
 	"mime/multipart"
 	"time"
 )
@@ -22,7 +22,7 @@ func NewResourceService(repo repository.Repository[mongo_collections.ResourceLis
 	}
 }
 
-func (service *ResourceService) AddResource(schema mongo_collections.ResourceListItem) (*mongo_collections.ResourceListItem, *models.MyError) {
+func (service *ResourceService) AddResource(schema mongo_collections.ResourceListItem) (*mongo_collections.ResourceListItem, *models.Error) {
 	newRes, err := service.repo.Add(schema)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (service *ResourceService) AddResource(schema mongo_collections.ResourceLis
 	return newRes, nil
 }
 
-func (service *ResourceService) GetList(schema models.ListRequest) (*models.ListResponse[mongo_collections.ResourceListItem], *models.MyError) {
+func (service *ResourceService) GetList(schema models.ListRequest) (*models.ListResponse[mongo_collections.ResourceListItem], *models.Error) {
 	list, err := service.repo.List(schema)
 	if err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func (service *ResourceService) GetList(schema models.ListRequest) (*models.List
 	return list, nil
 }
 
-func (service *ResourceService) GetResource(id string) (*mongo_collections.ResourceListItem, *models.MyError) {
+func (service *ResourceService) GetResource(id string) (*mongo_collections.ResourceListItem, *models.Error) {
 	resource, err := service.repo.Get(id)
 	if err != nil {
 		return nil, err
@@ -46,8 +46,8 @@ func (service *ResourceService) GetResource(id string) (*mongo_collections.Resou
 	return resource, nil
 }
 
-func (service *ResourceService) UploadResource(file *multipart.FileHeader) (*mongo_collections.ResourceListItem, *models.MyError) {
-	info, err := helpers.Minio.PutHeaderObject("temp", file)
+func (service *ResourceService) UploadResource(file *multipart.FileHeader) (*mongo_collections.ResourceListItem, *models.Error) {
+	info, err := clients.Minio.PutHeaderObject("temp", file)
 	if err != nil {
 		return nil, err
 	}
